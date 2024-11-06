@@ -97,6 +97,7 @@ install_fcd() {
   fi
 
   # move to /usr/local/bin
+  chmod +x /tmp/fcd_install/fcd
   sudo cp /tmp/fcd_install/fcd /usr/local/bin
   if [ $? -ne 0 ]; then
     echo "$ERROR failed to copy fcd to /usr/local/bin $CLEAR"
