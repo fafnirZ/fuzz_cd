@@ -1,41 +1,41 @@
 # fuzz_cd
-a basic bash script which you can add to your .bashrc to greatly improve your navigation capabilities within a terminal
-
+a basic bash script which uses fzf with additional configurations and capabilities to 
+quickly navigate your terminal
 
 ## Prerequisites
 ```
-sudo apt install fzf
+./install
 ```
 
-## how to install?
-step 1. copy the code in fcd.sh 
-step 2. open up bashrc by running 
+what the install script does?
 ```
-vim ~/.bashrc
-```
-and paste the function there
+check that fzf exists in /usr/local/bin
+if it doesnt, then download the standalone binary and move it to /usr/local/bin
 
-step 3. save and exit `[esc]:wq`
-step 4. reload bashrc `source ~/.bashrc`
-step 5. use it.
+then download latest version of fcd script from github
+compare with checksum provided by us.
+install the fcd into /usr/local/bin
+```
 
 
 ## Usage
 
-directory search
+open fzf interactive window in cwd, then you can interact and match, once you press enter, you will cd into that directory
 ```
-f
-```
-then start typing to perform fuzzy filtering, press enter to navigate to that folder
-
-
-file search
-```
-f -f
+fcd 
 ```
 
-search, but providing a search term before it even enters fzf interactive menu
+searches for a file, once found will navigate to folder containing file
 ```
-f {arguments}
+fcd -f 
 ```
 
+apply regex even before you want to enter interactive window (searches directories)
+```
+fcd {regex}
+```
+
+same as previous command but for files
+```
+fcd -f {regex}
+```
