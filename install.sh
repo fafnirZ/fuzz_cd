@@ -93,7 +93,7 @@ install_fcd() {
   fi
 
   # move to /usr/local/bin
-  sudo cp fcd /usr/local/bin
+  sudo cp /tmp/fcd_install/fcd /usr/local/bin
 
   # cleanup
   cd /tmp/fcd_install

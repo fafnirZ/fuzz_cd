@@ -4,7 +4,7 @@ quickly navigate your terminal
 
 ## Quick Install
 ```
-curl -o- https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/install.sh | sh
+curl -o- https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/install.sh | bash
 ```
 
 ## Prerequisites
