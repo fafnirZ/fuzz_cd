@@ -30,10 +30,17 @@ GREEN='\033[92m'
 WARNING='\033[0;33m'
 
 install_fzf_dep() {
-  if ! [ -f /tmp/fzf_install ]; then
+  if ! [ -d /tmp/fzf_install ]; then
     mkdir /tmp/fzf_install
   fi
-  wget https://github.com/junegunn/fzf/releases/download/v0.56.0/fzf-0.56.0-linux_amd64.tar.gz -O /tmp/fzf_install/fzf.tar.gz
+  wget https://github.com/junegunn/fzf/releases/download/v0.56.0/fzf-0.56.0-linux_amd64.tar.gz \
+    -O /tmp/fzf_install/fzf.tar.gz \
+    -q
+  if [ $? -ne 0 ]; then
+    echo "$ERROR failed to install fzf $CLEAR"
+    exit 1
+  fi 
+
   cd /tmp/fzf_install
 
   # untar and cp to usr/bin
@@ -64,28 +71,36 @@ check_fzf_dep() {
 
 
 install_fcd() {
-  if ! [ -f /tmp/fcd_install ]; then
+  if ! [ -d /tmp/fcd_install ]; then
     mkdir /tmp/fcd_install
   fi
 
-  wget https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/fcd -O /tmp/fcd_install/fcd
+  wget https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/fcd \
+     -O /tmp/fcd_install/fcd \
+     -q
+  if [ $? -ne 0 ]; then
+    echo "$ERROR failed to install fcd $CLEAR"
+    exit 1
+  fi 
 
   # check bin checksum
   original_checksum=$(curl https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/checksum)
   new_checksum=$(cat /tmp/fcd_install/fcd | md5sum | cut -d' ' -f1)
-  diff -q $original_checksum $new_checksum
+  diff <(echo $original_checksum) <(echo $new_checksum)
   if [ $? -ne 0 ];then
     echo "$ERROR ERROR CHECKSUMS DONT MATCH $CLEAR" 
+    exit 1
   fi
 
   # move to /usr/local/bin
-  cp fcd /usr/local/bin
+  sudo cp fcd /usr/local/bin
 
   # cleanup
   cd /tmp/fcd_install
   rm -r /tmp/fcd_install
   echo "cleaned up /tmp/fcd_install"
-  
+
 }
 
 check_fzf_dep
+install_fcd
