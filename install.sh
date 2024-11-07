@@ -80,7 +80,7 @@ install_fcd() {
   fi
 
   wget https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/fcd \
-     -O /tmp/fcd_install/fcd \
+     -O /tmp/fcd_install/fcdbin \
      -q
   if [ $? -ne 0 ]; then
     echo "$ERROR failed to install fcd $CLEAR"
@@ -89,7 +89,7 @@ install_fcd() {
 
   # check bin checksum
   original_checksum=$(curl https://raw.githubusercontent.com/fafnirZ/fuzz_cd/refs/heads/main/checksum)
-  new_checksum=$(cat /tmp/fcd_install/fcd | md5sum | cut -d' ' -f1)
+  new_checksum=$(cat /tmp/fcd_install/fcdbin | md5sum | cut -d' ' -f1)
   diff <(echo $original_checksum) <(echo $new_checksum)
   if [ $? -ne 0 ];then
     echo "$ERROR ERROR CHECKSUMS DONT MATCH $CLEAR" 
@@ -97,8 +97,8 @@ install_fcd() {
   fi
 
   # move to /usr/local/bin
-  chmod +x /tmp/fcd_install/fcd
-  sudo cp /tmp/fcd_install/fcd /usr/local/bin
+  chmod +x /tmp/fcd_install/fcdbin
+  sudo cp /tmp/fcd_install/fcdbin /usr/local/bin
   if [ $? -ne 0 ]; then
     echo "$ERROR failed to copy fcd to /usr/local/bin $CLEAR"
     exit 1
@@ -112,5 +112,24 @@ install_fcd() {
 
 }
 
+
+inject_bashrc() {
+
+  fn_sig="#fcd"
+  fn='fcd() { fcdbin $@ | xargs cd; }'
+  cat ~/.bashrc | grep '#fcd'
+  if [ $? -ne 0 ]; then
+    echo "fcd function doesnt exist in bashrc...adding"
+
+    # NOTE MAKE SURE THIS IS AN APPEND
+    echo "" >> ~/.bashrc
+    echo $fn_sig >> ~/.bashrc
+    echo $fn >> ~/.bashrc
+  fi
+  echo "Please run source ~/.bashrc for effects to take effect in your current terminal"
+}
+
+
 check_fzf_dep
 install_fcd
+inject_bashrc

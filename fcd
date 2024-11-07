@@ -24,6 +24,8 @@
 # THE SOFTWARE.
 ##
 
+# it just uses fzf to print out path to directories so that the function injected
+# into your bashrc can correctly cd into the correct path
 
 # it has the following capabilities
 # 1. [esc] to cancel search without navigating to home dir
@@ -63,7 +65,7 @@ f() {
                                         ! -name 'node_modules' \
                                 | fzf --query="$arg" ) || return
         fi
-        cd $dirname
+        echo $dirname
 }
 
 ######################
