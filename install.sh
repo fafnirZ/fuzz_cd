@@ -116,7 +116,7 @@ install_fcd() {
 inject_bashrc() {
 
   fn_sig="#fcd"
-  fn='fcd() { fcdbin $@ | xargs cd; }'
+  fn='fcd() { cd $(fcdbin $@); }'
   cat ~/.bashrc | grep '#fcd'
   if [ $? -ne 0 ]; then
     echo "fcd function doesnt exist in bashrc...adding"
